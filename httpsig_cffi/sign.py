@@ -40,10 +40,14 @@ class Signer(object):
                 self._rsa_public = self._rsa_private.public_key()
             except ValueError as e:
                 try:
-                    self._rsa_public = serialization.load_pem_public_key(secret,
-                                                                         backend=default_backend())
-                except ValueError as e:
-                    raise HttpSigException("Invalid key.")
+                    try:
+                        self._rsa_public = serialization._load_ssh_rsa_public_key(secret,
+                                                                             backend=default_backend())
+                    except ValueError as e:
+                        self._rsa_public = serialization.load_pem_public_key(secret,
+                                                                             backend=default_backend())
+                    except ValueError as e:
+                        raise HttpSigException("Invalid key.")
 
         elif self.sign_algorithm == 'hmac':
 
