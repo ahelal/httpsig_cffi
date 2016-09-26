@@ -41,8 +41,7 @@ class Signer(object):
             except ValueError as e:
                 try:
                     try:
-                        self._rsa_public = serialization._load_ssh_rsa_public_key(secret,
-                                                                             None,
+                        self._rsa_public = serialization.load_ssh_public_key (secret,
                                                                              backend=default_backend())
                     except ValueError as e:
                         self._rsa_public = serialization.load_pem_public_key(secret,
